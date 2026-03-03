@@ -17,7 +17,7 @@ API_URL = (
     "&alllangs=0&langwritten=S&txtCMSLang=S"
 )
 
-MONTHS_AHEAD = 3
+MONTHS_AHEAD = 2
 
 
 def get_issue_code():
