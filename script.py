@@ -1,6 +1,5 @@
 import os
 import sys
-import json
 import smtplib
 import requests
 import tempfile
@@ -21,14 +20,11 @@ API_URL = (
 MONTHS_AHEAD = 3
 
 
-def get_issue_codes():
-    """Return issue codes (YYYYMM) from the current month up to MONTHS_AHEAD."""
+def get_issue_code():
+    """Return the issue code (YYYYMM) for MONTHS_AHEAD months from now."""
     today = datetime.today()
-    codes = []
-    for i in range(MONTHS_AHEAD + 1):
-        dt = today + relativedelta(months=i)
-        codes.append(dt.strftime("%Y%m"))
-    return codes
+    dt = today + relativedelta(months=MONTHS_AHEAD)
+    return dt.strftime("%Y%m")
 
 
 def fetch_epub_url(issue_code):
@@ -93,21 +89,18 @@ def send_to_kindle(filepath, filename):
 
 
 def main():
-    issue_codes = get_issue_codes()
-    print(f"Issues to process: {issue_codes}\n")
+    code = get_issue_code()
+    print(f"Issue to process: {code}\n")
+
+    epub_url, filename = fetch_epub_url(code)
+    if not epub_url:
+        print("No EPUB available, exiting.")
+        sys.exit(1)
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        for code in issue_codes:
-            epub_url, filename = fetch_epub_url(code)
-            if not epub_url:
-                continue
-
-            filepath = os.path.join(tmpdir, filename)
-            try:
-                download_epub(epub_url, filepath)
-                send_to_kindle(filepath, filename)
-            except Exception as e:
-                print(f"    ERROR processing {code}: {e}", file=sys.stderr)
+        filepath = os.path.join(tmpdir, filename)
+        download_epub(epub_url, filepath)
+        send_to_kindle(filepath, filename)
 
     print("\nDone.")
 
