@@ -121,8 +121,8 @@ downloadEpub url' = do
 -- ---------------------------------------------------------------------------
 
 -- | Send an EPUB to the Kindle email address via SMTP with STARTTLS.
-sendToKindle :: BL.ByteString -> String -> IO ()
-sendToKindle epubBytes filename = do
+sendToKindle :: String -> BL.ByteString -> String -> IO ()
+sendToKindle issue epubBytes filename = do
   smtpServer <- getEnv "SMTP_SERVER"
   smtpPortStr <- lookupEnv "SMTP_PORT"
   senderEmail <- getEnv "SENDER_EMAIL"
@@ -139,7 +139,7 @@ sendToKindle epubBytes filename = do
           epubBytes
           (emptyMail from)
             { mailTo = [to],
-              mailHeaders = [("Subject", "Watchtower")],
+              mailHeaders = [("Subject", "Watchtower " <> T.pack issue)],
               mailParts = [[plainPart ""]]
             }
 
@@ -161,5 +161,5 @@ main = do
     Nothing -> fail "No EPUB available, exiting."
     Just (url', filename) -> do
       bytes <- downloadEpub url'
-      sendToKindle bytes filename
+      sendToKindle code bytes filename
       putStrLn "\nDone."
