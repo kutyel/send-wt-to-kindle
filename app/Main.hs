@@ -108,9 +108,9 @@ fetchEpubUrl issueCode = do
 
 -- | Download the EPUB file and return its contents.
 downloadEpub :: String -> IO BL.ByteString
-downloadEpub url = do
-  putStrLn $ "[*] Downloading " ++ url ++ "..."
-  req <- parseRequest url
+downloadEpub url' = do
+  putStrLn $ "[*] Downloading " ++ url' ++ "..."
+  req <- parseRequest url'
   resp <- httpLBS req
   let bytes = getResponseBody resp
       sizeKb = fromIntegral (BL.length bytes) `div` 1024 :: Int
@@ -160,7 +160,7 @@ main = do
   result <- fetchEpubUrl code
   case result of
     Nothing -> fail "No EPUB available, exiting."
-    Just (url, filename) -> do
-      bytes <- downloadEpub url
+    Just (url', filename) -> do
+      bytes <- downloadEpub url'
       sendToKindle bytes filename
       putStrLn "\nDone."

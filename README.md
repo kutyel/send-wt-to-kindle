@@ -1,5 +1,6 @@
 # send-wt-to-kindle
 
+[![NixCI Badge](https://nix-ci.com/badge/gh:kutyel:send-wt-to-kindle)](https://nix-ci.com/account/repo/gh:kutyel:send-wt-to-kindle/suite/main)
 [![Send Watchtower to Kindle](https://github.com/kutyel/send-wt-to-kindle/actions/workflows/send-watchtower.yml/badge.svg?branch=main)](https://github.com/kutyel/send-wt-to-kindle/actions/workflows/send-watchtower.yml)
 
 Automatically downloads the latest _La Atalaya_ (Watchtower study edition) in Spanish as EPUB from [jw.org](https://www.jw.org) and sends it to your Kindle via email.
