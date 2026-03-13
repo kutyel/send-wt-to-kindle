@@ -10,8 +10,9 @@ import qualified Data.ByteString.Lazy as BL
 import Data.Char (toUpper)
 import Data.Text (Text)
 import qualified Data.Text as T
-import Data.Time.Calendar (addGregorianMonthsClip, toGregorian)
+import Data.Time.Calendar (addGregorianMonthsClip)
 import Data.Time.Clock (getCurrentTime, utctDay)
+import Data.Time.Format (formatTime, defaultTimeLocale)
 import GHC.Generics (Generic)
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
 import Network.Mail.Mime
@@ -68,9 +69,7 @@ getIssueCode :: IO String
 getIssueCode = do
   today <- utctDay <$> getCurrentTime
   let future = addGregorianMonthsClip monthsAhead today
-      (y, m, _) = toGregorian future
-      padded = (if m < 10 then "0" else "") ++ show m
-  pure $ show y ++ padded
+  pure $ formatTime defaultTimeLocale "%Y%m" future
 
 -- ---------------------------------------------------------------------------
 -- HTTP helpers
