@@ -4,7 +4,7 @@
 
 Automatically downloads the latest _La Atalaya_ (Watchtower study edition) in Spanish as EPUB from [jw.org](https://www.jw.org) and sends it to your Kindle via email.
 
-Runs monthly via GitHub Actions (1st of each month), processing the current issue and up to 3 months ahead.
+Runs monthly via GitHub Actions (1st of each month), built with Haskell and Nix flakes.
 
 ## Setup
 
@@ -30,14 +30,22 @@ If using Gmail, enable 2FA and create an [App Password](https://myaccount.google
 
 ## Local usage
 
-```bash
-pip install -r requirements.txt
+Requires [Nix with flakes enabled](https://nixos.wiki/wiki/Flakes).
 
+```bash
 export SMTP_SERVER=smtp.gmail.com
 export SMTP_PORT=587
 export SENDER_EMAIL=you@gmail.com
 export SENDER_PASSWORD=your-app-password
 export KINDLE_EMAIL=you@kindle.com
 
-python script.py
+nix run .#
+```
+
+## Development
+
+```bash
+nix develop   # enter dev shell with cabal, ghcid, haskell-language-server
+cabal build   # build
+cabal run     # run
 ```

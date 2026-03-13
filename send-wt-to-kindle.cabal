@@ -1,0 +1,30 @@
+cabal-version: 3.0
+name:          send-wt-to-kindle
+version:       0.1.0.0
+synopsis:      Send Watchtower EPUB to Kindle via email
+license:       MIT
+license-file:  LICENSE
+author:        Flavio Corpa 
+maintainer:    flaviocorpa@gmail.com
+build-type:    Simple
+copyright:     2026 © Flavio Corpa
+
+executable send-wt-to-kindle
+  main-is:          Main.hs
+  hs-source-dirs:   app
+  default-language: Haskell2010
+  ghc-options:
+    -Wall -Wcompat -Wincomplete-record-updates
+    -Wincomplete-uni-patterns -Wmissing-export-lists -threaded -rtsopts
+    -with-rtsopts=-N
+
+  build-depends:
+    , aeson           >=2.0
+    , base            >=4.17 && <5
+    , bytestring      >=0.11
+    , filepath        >=1.4
+    , http-conduit    >=2.3
+    , mime-mail       >=0.5
+    , smtp-mail       >=0.3
+    , text            >=1.2
+    , time            >=1.12
