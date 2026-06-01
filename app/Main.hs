@@ -12,7 +12,7 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Time.Calendar (addGregorianMonthsClip)
 import Data.Time.Clock (getCurrentTime, utctDay)
-import Data.Time.Format (formatTime, defaultTimeLocale)
+import Data.Time.Format (defaultTimeLocale, formatTime)
 import GHC.Generics (Generic)
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
 import Network.Mail.Mime
@@ -148,6 +148,18 @@ sendToKindle issue epubBytes filename = do
   putStrLn "    Sent successfully!"
 
 -- ---------------------------------------------------------------------------
+-- Changelog
+-- ---------------------------------------------------------------------------
+
+-- | Append a line recording the successfully-sent issue to CHANGELOG.md.
+-- The resulting commit doubles as repository activity that keeps the scheduled
+-- GitHub Actions workflow from being disabled for inactivity.
+logSentIssue :: String -> IO ()
+logSentIssue issue = do
+  appendFile "CHANGELOG.md" ("- issue " ++ issue ++ "\n")
+  putStrLn "    Logged to CHANGELOG.md"
+
+-- ---------------------------------------------------------------------------
 -- Entry point
 -- ---------------------------------------------------------------------------
 
@@ -162,4 +174,5 @@ main = do
     Just (url', filename) -> do
       bytes <- downloadEpub url'
       sendToKindle code bytes filename
+      logSentIssue code
       putStrLn "\nDone."
